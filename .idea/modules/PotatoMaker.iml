@@ -6,6 +6,10 @@
       <excludeFolder url="file://$MODULE_DIR$/../../.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../build" />
       <excludeFolder url="file://$MODULE_DIR$/../../out" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/.cache" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/backgrounds" />
+      <excludeFolder url="file://$MODULE_DIR$/../../run/resourcepacks" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

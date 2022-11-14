@@ -65,7 +65,7 @@ public class PMPluginLoader {
             try {
                 var loader = loadPlugin(a);
                 plugins.put(loader.getPluginInfo().getName(),loader);
-                LOG.info("PM成功载入插件"+loader.getPluginInfo().getName());
+                LOG.info("PM成功载入插件"+loader.getPluginInfo().getName()+" ,插件目录:"+a);
             } catch (MalformedURLException e) {
                 LOG.warn("无法载入插件:" + a);
             } catch (PluginExistException e) {
