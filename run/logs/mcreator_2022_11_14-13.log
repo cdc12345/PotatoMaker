@@ -1,0 +1,32 @@
+2022-11-14-18:15:14 [main/INFO] [Launcher] 
+  @@@@@@@@@@@@@@@\].           =@@@@@@^                       ,@@@@@@^   
+  @@@@@@@@@@@@@@@@@@@\.        =@@@@@@@^                     .@@@@@@@^   
+  @@@@@.      .[\@@@@@@^       =@@@@@@@@`                   .@@@@@@@@^   
+  @@@@@.          ,@@@@@^      =@@@@=@@@@.                 .@@@@O@@@@^   
+  @@@@@.           =@@@@O      =@@@@`@@@@@.                /@@@/=@@@@^   
+  @@@@@.           .@@@@@      =@@@@^.@@@@\               /@@@@.=@@@@^   
+  @@@@@.           ,@@@@O      =@@@@^ ,@@@@\             =@@@@. =@@@@^   
+  @@@@@.          ./@@@@^      =@@@@^  ,@@@@^           =@@@@`  =@@@@^   
+  @@@@@.        .]@@@@@^       =@@@@^   =@@@@^         ,@@@@`   =@@@@^   
+  @@@@@\]]]]/@@@@@@@@@`        =@@@@^    =@@@@`       ,@@@@^    =@@@@^   
+  @@@@@@@@@@@@@@@@@[.          =@@@@^     \@@@@.     .@@@@^     =@@@@^   
+  @@@@@[[[[[[[[.               =@@@@^     .\@@@@.   .@@@@/      =@@@@^   
+  @@@@@.                       =@@@@^      .@@@@\   /@@@/       =@@@@^   
+  @@@@@.                       =@@@@^       .@@@@^ =@@@@.       =@@@@^   
+  @@@@@.                       =@@@@^        ,@@@@\@@@@.        =@@@@^   
+  @@@@@.                       =@@@@^         ,@@@@@@@`         =@@@@^   
+  @@@@@.                       =@@@@^          =@@@@@`          =@@@@^   
+  @@@@@.                       =@@@@^           =@@@^           =@@@@^   
+
+2022-11-14-18:15:14 [main/INFO] [Launcher] PotatoMaker感谢您的使用
+2022-11-14-18:15:14 [main/INFO] [PMPluginLoader] PM成功载入插件testPlugin
+2022-11-14-18:15:14 [main/WARN] [PMPluginLoader] 无法载入重名插件:E:\gradleProject\PotatoMaker\run\plugins\testplugin.jar
+2022-11-14-18:15:14 [main/INFO] [testPlugin] helloworld
+2022-11-14-18:15:14 [main/INFO] [PMPluginLoader] 插件的调用已经完成
+2022-11-14-18:15:14 [Thread-0/ERROR] [Exception] Uncaught exception in Thread-0
+java.lang.NullPointerException: Cannot invoke "org.cdc.potatomaker.plugin.loader.AbstractPlugin.onDisable()" because the return value of "org.cdc.potatomaker.plugin.loader.PluginLoader.getPluginInstance()" is null
+	at org.cdc.potatomaker.plugin.loader.PMPluginLoader.lambda$unloadPlugins$2(PMPluginLoader.java:131) ~[classes/:?]
+	at java.util.HashMap$Values.forEach(HashMap.java:1065) ~[?:?]
+	at org.cdc.potatomaker.plugin.loader.PMPluginLoader.unloadPlugins(PMPluginLoader.java:131) ~[classes/:?]
+	at org.cdc.potatomaker.Launcher.lambda$main$1(Launcher.java:73) ~[classes/:?]
+	at java.lang.Thread.run(Thread.java:833) ~[?:?]

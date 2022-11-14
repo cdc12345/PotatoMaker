@@ -1,0 +1,28 @@
+2022-11-14-18:11:24 [main/INFO] [Launcher] 
+  @@@@@@@@@@@@@@@\].           =@@@@@@^                       ,@@@@@@^   
+  @@@@@@@@@@@@@@@@@@@\.        =@@@@@@@^                     .@@@@@@@^   
+  @@@@@.      .[\@@@@@@^       =@@@@@@@@`                   .@@@@@@@@^   
+  @@@@@.          ,@@@@@^      =@@@@=@@@@.                 .@@@@O@@@@^   
+  @@@@@.           =@@@@O      =@@@@`@@@@@.                /@@@/=@@@@^   
+  @@@@@.           .@@@@@      =@@@@^.@@@@\               /@@@@.=@@@@^   
+  @@@@@.           ,@@@@O      =@@@@^ ,@@@@\             =@@@@. =@@@@^   
+  @@@@@.          ./@@@@^      =@@@@^  ,@@@@^           =@@@@`  =@@@@^   
+  @@@@@.        .]@@@@@^       =@@@@^   =@@@@^         ,@@@@`   =@@@@^   
+  @@@@@\]]]]/@@@@@@@@@`        =@@@@^    =@@@@`       ,@@@@^    =@@@@^   
+  @@@@@@@@@@@@@@@@@[.          =@@@@^     \@@@@.     .@@@@^     =@@@@^   
+  @@@@@[[[[[[[[.               =@@@@^     .\@@@@.   .@@@@/      =@@@@^   
+  @@@@@.                       =@@@@^      .@@@@\   /@@@/       =@@@@^   
+  @@@@@.                       =@@@@^       .@@@@^ =@@@@.       =@@@@^   
+  @@@@@.                       =@@@@^        ,@@@@\@@@@.        =@@@@^   
+  @@@@@.                       =@@@@^         ,@@@@@@@`         =@@@@^   
+  @@@@@.                       =@@@@^          =@@@@@`          =@@@@^   
+  @@@@@.                       =@@@@^           =@@@^           =@@@@^   
+
+2022-11-14-18:11:24 [main/INFO] [Launcher] PotatoMaker感谢您的使用
+2022-11-14-18:11:24 [main/INFO] [PMPluginLoader] PM成功载入插件testPlugin
+2022-11-14-18:11:24 [main/WARN] [PMPluginLoader] 无法载入重名插件:E:\gradleProject\PotatoMaker\run\plugins\testplugin.jar
+2022-11-14-18:11:24 [main/ERROR] [Exception] Uncaught exception in main
+java.lang.NoSuchMethodError: 'java.util.logging.Logger org.cdc.potatomaker.plugin.loader.PluginLoader.getLogger()'
+	at org.cdc.plugin.TestPlugin.onEnable(TestPlugin.java:16) ~[?:?]
+	at org.cdc.potatomaker.plugin.loader.PMPluginLoader.loadPlugins(PMPluginLoader.java:97) ~[classes/:?]
+	at org.cdc.potatomaker.Launcher.main(Launcher.java:73) ~[classes/:?]

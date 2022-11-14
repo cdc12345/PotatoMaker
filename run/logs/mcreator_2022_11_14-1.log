@@ -1,0 +1,79 @@
+2022-11-14-17:55:34 [main/INFO] [Launcher] 
+  @@@@@@@@@@@@@@@\].           =@@@@@@^                       ,@@@@@@^   
+  @@@@@@@@@@@@@@@@@@@\.        =@@@@@@@^                     .@@@@@@@^   
+  @@@@@.      .[\@@@@@@^       =@@@@@@@@`                   .@@@@@@@@^   
+  @@@@@.          ,@@@@@^      =@@@@=@@@@.                 .@@@@O@@@@^   
+  @@@@@.           =@@@@O      =@@@@`@@@@@.                /@@@/=@@@@^   
+  @@@@@.           .@@@@@      =@@@@^.@@@@\               /@@@@.=@@@@^   
+  @@@@@.           ,@@@@O      =@@@@^ ,@@@@\             =@@@@. =@@@@^   
+  @@@@@.          ./@@@@^      =@@@@^  ,@@@@^           =@@@@`  =@@@@^   
+  @@@@@.        .]@@@@@^       =@@@@^   =@@@@^         ,@@@@`   =@@@@^   
+  @@@@@\]]]]/@@@@@@@@@`        =@@@@^    =@@@@`       ,@@@@^    =@@@@^   
+  @@@@@@@@@@@@@@@@@[.          =@@@@^     \@@@@.     .@@@@^     =@@@@^   
+  @@@@@[[[[[[[[.               =@@@@^     .\@@@@.   .@@@@/      =@@@@^   
+  @@@@@.                       =@@@@^      .@@@@\   /@@@/       =@@@@^   
+  @@@@@.                       =@@@@^       .@@@@^ =@@@@.       =@@@@^   
+  @@@@@.                       =@@@@^        ,@@@@\@@@@.        =@@@@^   
+  @@@@@.                       =@@@@^         ,@@@@@@@`         =@@@@^   
+  @@@@@.                       =@@@@^          =@@@@@`          =@@@@^   
+  @@@@@.                       =@@@@^           =@@@^           =@@@@^   
+
+2022-11-14-17:55:34 [main/INFO] [Launcher] PotatoMaker感谢您的使用
+2022-11-14-17:55:34 [main/ERROR] [STDERR] com.google.gson.JsonIOException: Failed making field 'java.net.URLClassLoader#ucp' accessible; either change its visibility or write a custom TypeAdapter for its declaring type
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.reflect.ReflectionHelper.makeAccessible(ReflectionHelper.java:23)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.getBoundFields(ReflectiveTypeAdapterFactory.java:203)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.create(ReflectiveTypeAdapterFactory.java:112)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.Gson.getAdapter(Gson.java:531)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.createBoundField(ReflectiveTypeAdapterFactory.java:137)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.getBoundFields(ReflectiveTypeAdapterFactory.java:211)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.create(ReflectiveTypeAdapterFactory.java:112)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.Gson.getAdapter(Gson.java:531)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.createBoundField(ReflectiveTypeAdapterFactory.java:137)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.getBoundFields(ReflectiveTypeAdapterFactory.java:211)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.create(ReflectiveTypeAdapterFactory.java:112)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.Gson.getAdapter(Gson.java:531)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.Gson.fromJson(Gson.java:1057)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.Gson.fromJson(Gson.java:986)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at org.cdc.potatomaker.plugin.loader.PMPluginLoader.loadPluginInfo(PMPluginLoader.java:121)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at org.cdc.potatomaker.plugin.loader.PMPluginLoader.loadPlugin(PMPluginLoader.java:117)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at org.cdc.potatomaker.plugin.loader.PMPluginLoader.lambda$loadPlugins$0(PMPluginLoader.java:66)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at org.cdc.potatomaker.plugin.loader.PMPluginLoader.loadPlugins(PMPluginLoader.java:64)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at org.cdc.potatomaker.Launcher.main(Launcher.java:73)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] Caused by: java.lang.reflect.InaccessibleObjectException: Unable to make field private final jdk.internal.loader.URLClassPath java.net.URLClassLoader.ucp accessible: module java.base does not "opens java.net" to unnamed module @44f75083
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:354)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:297)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at java.base/java.lang.reflect.Field.checkCanSetAccessible(Field.java:178)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at java.base/java.lang.reflect.Field.setAccessible(Field.java:172)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.reflect.ReflectionHelper.makeAccessible(ReflectionHelper.java:20)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] ... 19 more
+2022-11-14-17:55:34 [main/WARN] [PMPluginLoader] 因为未知的原因无法载入插件:E:\gradleProject\PotatoMaker\run\plugins\testplugin.jar
+2022-11-14-17:55:34 [main/ERROR] [STDERR] com.google.gson.JsonIOException: Failed making field 'java.net.URLClassLoader#ucp' accessible; either change its visibility or write a custom TypeAdapter for its declaring type
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.reflect.ReflectionHelper.makeAccessible(ReflectionHelper.java:23)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.getBoundFields(ReflectiveTypeAdapterFactory.java:203)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.create(ReflectiveTypeAdapterFactory.java:112)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.Gson.getAdapter(Gson.java:531)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.createBoundField(ReflectiveTypeAdapterFactory.java:137)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.getBoundFields(ReflectiveTypeAdapterFactory.java:211)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.create(ReflectiveTypeAdapterFactory.java:112)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.Gson.getAdapter(Gson.java:531)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.createBoundField(ReflectiveTypeAdapterFactory.java:137)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.getBoundFields(ReflectiveTypeAdapterFactory.java:211)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.create(ReflectiveTypeAdapterFactory.java:112)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.Gson.getAdapter(Gson.java:531)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.Gson.fromJson(Gson.java:1057)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.Gson.fromJson(Gson.java:986)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at org.cdc.potatomaker.plugin.loader.PMPluginLoader.loadPluginInfo(PMPluginLoader.java:121)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at org.cdc.potatomaker.plugin.loader.PMPluginLoader.loadPlugin(PMPluginLoader.java:117)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at org.cdc.potatomaker.plugin.loader.PMPluginLoader.lambda$loadPlugins$0(PMPluginLoader.java:66)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at org.cdc.potatomaker.plugin.loader.PMPluginLoader.loadPlugins(PMPluginLoader.java:64)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at org.cdc.potatomaker.Launcher.main(Launcher.java:73)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] Caused by: java.lang.reflect.InaccessibleObjectException: Unable to make field private final jdk.internal.loader.URLClassPath java.net.URLClassLoader.ucp accessible: module java.base does not "opens java.net" to unnamed module @44f75083
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:354)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:297)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at java.base/java.lang.reflect.Field.checkCanSetAccessible(Field.java:178)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at java.base/java.lang.reflect.Field.setAccessible(Field.java:172)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] at com.google.gson.internal.reflect.ReflectionHelper.makeAccessible(ReflectionHelper.java:20)
+2022-11-14-17:55:34 [main/ERROR] [STDERR] ... 19 more
+2022-11-14-17:55:34 [main/WARN] [PMPluginLoader] 因为未知的原因无法载入插件:E:\gradleProject\PotatoMaker\run\plugins\testplugin.jar

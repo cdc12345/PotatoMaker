@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
+
+group 'org.cdc'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 17
+targetCompatibility = 17
+
+compileJava.options.encoding = 'UTF-8'
+tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+
+
+allprojects {
+    repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/public/'
+        }
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+dependencies {
+    //test
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    //basic
+    implementation 'com.google.code.gson:gson:2.9.1'
+    implementation 'org.jetbrains:annotations:20.1.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.18.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    implementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
+    implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.31'
+    compileOnly "org.projectlombok:lombok:1.18.20"
+    annotationProcessor "org.projectlombok:lombok:1.18.20"
+}
+
+task pmInit{
+    if (!file("run").exists()) {
+        file("run").mkdir()
+    }
+}
+test {
+    useJUnitPlatform()
+
+
+    testLogging.showStandardStreams = true
+    testLogging.exceptionFormat = 'full'
+    maxHeapSize = "1024m"
+
+    jvmArgs '--add-opens', 'java.base/java.lang=ALL-UNNAMED'
+}
+
+jar{
+    archiveFileName = "pm.jar"
+}
