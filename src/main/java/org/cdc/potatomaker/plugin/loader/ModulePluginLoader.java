@@ -1,5 +1,7 @@
 package org.cdc.potatomaker.plugin.loader;
 
+import org.cdc.potatomaker.annotation.Open;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,9 +16,17 @@ import java.util.ArrayList;
  * @classname ModulePluginLoader
  * @date 2022/11/14 14:23
  */
+@Open
 public class ModulePluginLoader extends URLClassLoader {
-    public ModulePluginLoader(File pluginPath) throws MalformedURLException {
-        super(new URL[]{pluginPath.toURI().toURL()},Thread.currentThread().getContextClassLoader());
+    private final String limitClassPackagePrefix ;
+    private final ClassLoader originClassLoader;
+    public ModulePluginLoader(File pluginPath,ClassLoader origin) throws MalformedURLException {
+        this(pluginPath,origin,"org.cdc.potatomaker");
+    }
+    public ModulePluginLoader(File pluginPath,ClassLoader origin,String limitClassPackage) throws MalformedURLException {
+        super(new URL[]{pluginPath.toURI().toURL()},null);
+        this.originClassLoader = origin;
+        this.limitClassPackagePrefix = limitClassPackage;
     }
 
     private final ArrayList<ModulePluginLoader> dependencies = new ArrayList<>();
@@ -28,6 +38,16 @@ public class ModulePluginLoader extends URLClassLoader {
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         Class<?> result = null;
+        //从我这找
+        try{
+            result = originClassLoader.loadClass(name);
+            if (result.getPackage().getName().startsWith(limitClassPackagePrefix)
+                    &&!result.isAnnotation()&&!result.isAnnotationPresent(Open.class)){
+                result = null;
+            }
+        } catch (Exception ignore){
+        }
+
         //从依赖中寻找
         for (ModulePluginLoader pluginLoader : dependencies) {
             try {

@@ -14,12 +14,13 @@ import java.util.function.Supplier;
  * @classname PreferenceRenderingEvent
  * @date 2022/11/13 22:38
  */
-public class PreferenceRenderingEvent extends Event {
+public final class PreferenceRenderingEvent extends Event {
     @Getter
     private final HashMap<String,Object> cache;
     private final Supplier<Object> getter;
     private final Consumer<Object> setter;
     public PreferenceRenderingEvent(Supplier<Object> getter, Consumer<Object> setter,HashMap<String,Object> cache){
+        super(null);
         this.getter = getter;
         this.setter = setter;
         this.cache = cache;

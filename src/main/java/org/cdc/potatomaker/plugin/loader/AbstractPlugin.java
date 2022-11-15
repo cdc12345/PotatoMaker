@@ -1,5 +1,9 @@
 package org.cdc.potatomaker.plugin.loader;
 
+import org.cdc.potatomaker.annotation.Open;
+
+import java.io.File;
+
 /**
  * e-mail: 3154934427@qq.com
  * 插件必须实现的类
@@ -8,6 +12,7 @@ package org.cdc.potatomaker.plugin.loader;
  * @classname JavaPlugin
  * @date 2022/11/13 21:34
  */
+@Open
 public abstract class AbstractPlugin {
 
     public static AbstractPlugin getPlugin(String name){
@@ -31,6 +36,10 @@ public abstract class AbstractPlugin {
 
     protected PluginLoader getPluginLoader(){
         return pluginLoader;
+    }
+
+    protected File getDataFolder(){
+        return getPluginLoader().getPluginDataFolder();
     }
 
 }

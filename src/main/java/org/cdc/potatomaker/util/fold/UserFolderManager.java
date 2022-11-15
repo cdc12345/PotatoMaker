@@ -4,6 +4,7 @@ import org.cdc.potatomaker.ui.dialogs.UserFolderSelector;
 import org.cdc.potatomaker.util.ResourceManager;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * e-mail: 3154934427@qq.com
@@ -18,7 +19,7 @@ public class UserFolderManager extends ResourceManager {
 
     public static UserFolderManager getInstance() {
         if (instance == null) {
-            instance = new UserFolderManager(UserFolderSelector.userFolder);
+            instance = new UserFolderManager(UserFolderSelector.getInstance().userFolder);
         }
         return instance;
     }
@@ -36,6 +37,8 @@ public class UserFolderManager extends ResourceManager {
         getPluginsFolder().mkdirs();
 
         getBackgroundsFolder().mkdirs();
+
+        getWorkspaceFolder().mkdirs();
     }
 
     public File getGradleCacheFolder(){
@@ -54,7 +57,5 @@ public class UserFolderManager extends ResourceManager {
         return getOuterResourceAsFile("backgrounds");
     }
 
-    public File getPreferenceFile(){
-        return getOuterResourceAsFile("preferences");
-    }
+    public File getWorkspaceFolder(){return getOuterResourceAsFile("workspaces");}
 }

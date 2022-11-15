@@ -2,7 +2,7 @@ package org.cdc.potatomaker.exception;
 
 /**
  * e-mail: 3154934427@qq.com
- * 已经定义错误
+ * 定义类错误
  *
  * @author cdc123
  * @classname DefinedException

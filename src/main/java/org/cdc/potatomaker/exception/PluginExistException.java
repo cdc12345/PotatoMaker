@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * @classname PluginExistException
  * @date 2022/11/14 15:23
  */
-public class PluginExistException extends Exception {
+public class PluginExistException extends PluginException {
     public PluginExistException(@NotNull String mess) {
         super(mess);
     }

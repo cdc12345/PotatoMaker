@@ -37,7 +37,7 @@ public class DefaultPreferenceRender implements PreferenceRender {
     public DefaultPreferenceRender(){
         this.componentCache = new ArrayList<>();
         this.sections = new ArrayList<>();
-        this.preferences = (Preferences) PreferenceManager.getPreferences().clone();
+        this.preferences = PreferenceManager.getPreferences().clone();
         this.cache = new HashMap<>();
     }
 

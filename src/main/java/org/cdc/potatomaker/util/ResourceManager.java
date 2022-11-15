@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * e-mail: 3154934427@qq.com
@@ -32,11 +33,16 @@ public class ResourceManager {
 
     public InputStream getOuterResourceAsStream(@NotNull String outerPath) {
         var outer = getOuterResourceAsFile(outerPath);
+        outer.getParentFile().mkdirs();
         try {
             return new FileInputStream(outer);
         } catch (FileNotFoundException e) {
             return null;
         }
+    }
+
+    public static Reader fromInputStream(InputStream inputStream){
+        return new InputStreamReader(inputStream);
     }
 
     /**
@@ -78,6 +84,21 @@ public class ResourceManager {
             inner.transferTo(getOuterResourceAsOutputStream(outerPath));
         } else {
             throw new FileNotFoundException("Could not find innerSource: "+innerPath);
+        }
+    }
+
+    public void writeResource(String text,String name){
+        writeResource(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)),name);
+    }
+
+    public void writeResource(InputStream inputStream,String name){
+        var out = getOuterResourceAsOutputStream(name);
+        try {
+            inputStream.transferTo(out);
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

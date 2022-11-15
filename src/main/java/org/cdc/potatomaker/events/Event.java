@@ -12,5 +12,9 @@ import lombok.Data;
  */
 @Data
 public abstract class Event {
-    private Object source;
+    protected Object source;
+
+    public Event(Object source){
+        this.source = source;
+    }
 }

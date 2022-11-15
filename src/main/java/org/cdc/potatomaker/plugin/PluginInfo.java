@@ -24,40 +24,41 @@ public class PluginInfo {
      * 插件名称
      */
     @NotNull
-    @Expose
     private String name;
     /**
      * 展示版本,此信息展示给用户
      */
     @NotNull
-    @Expose
     private String version;
     /**
      * 内部版本,用于对比以进行版本更新
      */
-    @Expose
     private int innerVersion = -1;
     /**
      * 插件主类
      *
     */
-    @Expose
     private String main;
     /**
      * 作者列表
      */
-    @Expose
     private String[] authors;
     /**
      * 插件类型
      */
-    @Expose
     private PluginType[] types = new PluginType[]{PluginType.Unknown};
     /**
      * 依赖
      */
-    @Expose
     private String[] depends;
+    /**
+     * 插件实例化优先级
+     */
+    private int priority = -1;
+    /**
+     * 插件最小支持pm版本,请填int
+     */
+    private int minVersion = 1;
 
     /**
      * 得到内部版本

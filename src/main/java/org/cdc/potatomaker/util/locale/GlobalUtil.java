@@ -1,4 +1,4 @@
-﻿package org.cdc.potatomaker.util.locale;
+package org.cdc.potatomaker.util.locale;
 
 import com.google.gson.Gson;
 

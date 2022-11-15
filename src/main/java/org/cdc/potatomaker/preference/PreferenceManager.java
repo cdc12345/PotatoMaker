@@ -1,12 +1,17 @@
 package org.cdc.potatomaker.preference;
 
 import com.google.gson.Gson;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.cdc.potatomaker.preference.render.PreferenceRender;
-import org.cdc.potatomaker.util.fold.UserFolderManager;
+import org.cdc.potatomaker.util.fold.RuntimeWorkSpaceManager;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+
+import static org.cdc.potatomaker.util.ResourceManager.fromInputStream;
 
 /**
  * e-mail: 3154934427@qq.com
@@ -17,30 +22,30 @@ import java.io.FileReader;
  * @date 2022/11/13 22:19
  */
 public class PreferenceManager {
-    private static final Object preLock = new Object();
+    private static final Logger LOGGER = LogManager.getLogger("Preference");
     private static Preferences preferences;
 
-    public static void loadPreferencesFromFile() throws FileNotFoundException {
-        File preferenceFile = UserFolderManager.getInstance().getPreferenceFile();
-
-        setPreferences(new Gson().fromJson(new FileReader(preferenceFile), Preferences.class));
+    public static void loadPreferencesFromFile() throws IOException {
+        LOGGER.info("系统开始载入设置");
+        setPreferences(new Gson().fromJson(fromInputStream(Objects.requireNonNullElse(RuntimeWorkSpaceManager
+                .getInstance().getOuterResourceAsStream("config/preferences.json"),
+                new ByteArrayInputStream("[]".getBytes(StandardCharsets.UTF_8)))), Preferences.class));
+        LOGGER.info("设置载入成功");
     }
 
-    public static void reloadPreferences() throws FileNotFoundException {
+    public static void reloadPreferences() throws IOException {
         loadPreferencesFromFile();
     }
 
     public static Preferences getPreferences(){
-        //防止程序载入配置时读取,出现异常现象
-        synchronized (preLock){
-            return preferences;
-        }
+        return preferences;
     }
 
     public static void setPreferences(Preferences pre){
-        synchronized (preLock){
+        if (pre == null)
+            preferences = new Preferences();
+        else
             preferences = pre;
-        }
     }
 
     public static PreferenceRender getPreferenceRender(){
@@ -48,7 +53,10 @@ public class PreferenceManager {
     }
 
     public static void storePreferences(){
-        preferences = getPreferenceRender().storePreference();
+        if (getPreferenceRender() != null)
+            preferences = getPreferenceRender().storePreference();
+        RuntimeWorkSpaceManager.getInstance().writeResource(new Gson().toJson(getPreferences()),
+                "config/preferences.json");
     }
 
 

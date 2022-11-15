@@ -4,12 +4,12 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.cdc.potatomaker.exception.DefinedException;
-import org.cdc.potatomaker.plugin.loader.PMPluginLoader;
-import org.cdc.potatomaker.ui.dialogs.UserFolderSelector;
 import org.cdc.potatomaker.util.DefaultExceptionHandler;
 import org.cdc.potatomaker.util.LoggingOutputStream;
 import org.cdc.potatomaker.util.OSUtil;
+import org.cdc.potatomaker.util.PotatoMakerApplication;
 
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
@@ -25,9 +25,8 @@ import java.util.List;
  * @date 2022/11/5 12:09
  */
 public class Launcher {
-    public static void main(String[] args) throws DefinedException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
 
-        List<String> arguments = Arrays.asList(args);
+    public static void main(String[] args)  {
 
         System.setProperty("jna.nosys", "true");
         System.setProperty("log_directory",System.getProperty("user.dir"));
@@ -69,11 +68,13 @@ public class Launcher {
         LOG.info(logo);
         LOG.info("PotatoMaker感谢您的使用");
 
-        Runtime.getRuntime().addShutdownHook(new Thread(()->{
-            PMPluginLoader.getInstance().unloadPlugins();
-        }));
-
-        UserFolderSelector.userFolder = System.getProperty("user.dir");
-        PMPluginLoader.getInstance().loadPlugins();
+        new Thread(()-> {
+            try {
+                PotatoMakerApplication.createInstance(args);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Runtime.getRuntime().exit(-1);
+            }
+        }).start();
     }
 }

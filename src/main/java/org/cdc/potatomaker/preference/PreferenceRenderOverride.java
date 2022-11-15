@@ -16,8 +16,9 @@ public class PreferenceRenderOverride {
     private static PreferenceRender instance;
 
     public static PreferenceRender getInstance(){
-        if (instance == null) instance = new DefaultPreferenceRender();
-        return instance;
+        return null;
+/*        if (instance == null) instance = new DefaultPreferenceRender();
+        return instance;*/
     }
 
 

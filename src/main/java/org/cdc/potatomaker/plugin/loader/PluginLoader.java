@@ -2,19 +2,21 @@ package org.cdc.potatomaker.plugin.loader;
 
 import lombok.Data;
 import org.apache.logging.log4j.Logger;
+import org.cdc.potatomaker.annotation.Open;
 import org.cdc.potatomaker.plugin.PluginInfo;
 
 import java.io.File;
 
 /**
  * e-mail: 3154934427@qq.com
- * 插件载入器
+ * 插件载入器,主要用于插件载入时
  *
  * @author cdc123
  * @classname PluginLoader
  * @date 2022/11/13 21:29
  */
 @Data
+@Open
 public class PluginLoader {
     /**
      * 插件实例
@@ -44,5 +46,9 @@ public class PluginLoader {
      * 插件Logger
      */
     private Logger logger;
+    /**
+     * 插件载入状态
+     */
+    private boolean enable;
 
 }
