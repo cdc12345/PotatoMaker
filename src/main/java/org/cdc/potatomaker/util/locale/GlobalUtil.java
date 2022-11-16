@@ -1,6 +1,8 @@
 package org.cdc.potatomaker.util.locale;
 
 import com.google.gson.Gson;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,24 +19,32 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2022/11/14 20:21
  */
 public class GlobalUtil {
+    private static GlobalUtil instance;
+
+    public static GlobalUtil getInstance() {
+        if (instance == null) {
+            instance = new GlobalUtil();
+        }
+        return instance;
+    }
+
+    private GlobalUtil() {
+
+    }
+    
     private final ConcurrentHashMap<String,LanguageMap> lang = new ConcurrentHashMap<>();
 
+    @Getter
+    @Setter
     private String currentLang;
 
     public void addLanguage(String language,InputStream inputStream){
         lang.put(language,new Gson().fromJson(new InputStreamReader(inputStream),LanguageMap.class));
     }
 
-    public void setCurrentLang(String lang){
-        currentLang = lang;
-    }
-
-    public String getLangValue(String key){
-        return lang.get(currentLang).get(key);
-    }
 
     public String getLangValue(String key,Object... objects){
-        return MessageFormat.format(getLangValue(key),objects);
+        return MessageFormat.format(t(key),objects);
     }
 
     //动态修改语言
@@ -47,5 +57,14 @@ public class GlobalUtil {
     }
 
     public static class LanguageMap extends HashMap<String,String>{}
+
+    /**
+     * 为了兼容mcr
+     * @param key 键值
+     * @return 翻译
+     */
+    public String t(String key){
+        return lang.get(currentLang).get(key);
+    }
 
 }

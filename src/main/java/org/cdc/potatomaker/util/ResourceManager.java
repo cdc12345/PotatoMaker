@@ -2,6 +2,7 @@ package org.cdc.potatomaker.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.cdc.potatomaker.annotation.Open;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -15,6 +16,7 @@ import java.nio.charset.StandardCharsets;
  * @classname ResourceUtil
  * @date 2022/11/5 12:10
  */
+@Open
 public class ResourceManager {
     private static final Logger LOGGER = LogManager.getLogger(ResourceManager.class.getSimpleName());
     private final File parent;
@@ -31,16 +33,24 @@ public class ResourceManager {
         return new File(parent,outerPath);
     }
 
-    public InputStream getOuterResourceAsStream(@NotNull String outerPath) {
+    public InputStream getOuterResourceAsStream(@NotNull String outerPath){
+        return this.getOuterResourceAsStream(outerPath,null);
+    }
+    public InputStream getOuterResourceAsStream(@NotNull String outerPath,InputStream defaultInput) {
         var outer = getOuterResourceAsFile(outerPath);
         outer.getParentFile().mkdirs();
         try {
             return new FileInputStream(outer);
         } catch (FileNotFoundException e) {
-            return null;
+            return defaultInput;
         }
     }
 
+    /**
+     * 把字节流转化为字符流
+     * @param inputStream
+     * @return
+     */
     public static Reader fromInputStream(InputStream inputStream){
         return new InputStreamReader(inputStream);
     }
@@ -50,7 +60,6 @@ public class ResourceManager {
      * @param outerPath 外部目录
      * @return 输出流
      */
-
     public OutputStream getOuterResourceAsOutputStream(@NotNull String outerPath){
         var outer = getOuterResourceAsFile(outerPath);
         if (outer.isDirectory()){
@@ -68,6 +77,11 @@ public class ResourceManager {
         return ResourceManager.class.getResourceAsStream("/"+innerPath);
     }
 
+    /**
+     * 提取内部的资源,内部路径和外部路径保持一致
+     * @param innerPaths 内部路径
+     * @throws IOException 提取失败
+     */
     public void extractResources(String... innerPaths) throws IOException {
         for (String inner:innerPaths){
             extractResource(inner);
@@ -78,6 +92,12 @@ public class ResourceManager {
         extractResource(innerPath,innerPath);
     }
 
+    /**
+     * 提取内部资源到外部路径
+     * @param innerPath 内部路径
+     * @param outerPath 外部路径
+     * @throws IOException 提取失败
+     */
     public void extractResource(String innerPath,String outerPath) throws IOException {
         var inner = getInnerResourceAsStream(innerPath);
         if (inner != null){
@@ -86,6 +106,12 @@ public class ResourceManager {
             throw new FileNotFoundException("Could not find innerSource: "+innerPath);
         }
     }
+
+    /**
+     * 将内容写入外部资源
+     * @param text 内容
+     * @param name 资源路径
+     */
 
     public void writeResource(String text,String name){
         writeResource(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)),name);
@@ -102,7 +128,12 @@ public class ResourceManager {
         }
     }
 
-    public InputStream getResourceAsStream(String resourcePath){
+    /**
+     *
+     * @param resourcePath 内部和外部统一的路径
+     * @return 内部或者外部资源的流 如果外部资源是null 那么就会输出内部资源
+     */
+    public InputStream getInnerOrOuterResourceAsStream(String resourcePath){
         var outer = getOuterResourceAsStream(resourcePath);
         return outer==null? getInnerResourceAsStream(resourcePath):outer;
     }

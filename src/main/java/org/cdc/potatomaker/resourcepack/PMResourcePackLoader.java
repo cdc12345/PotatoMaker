@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.cdc.potatomaker.annotation.Open;
 import org.cdc.potatomaker.events.Events;
+import org.cdc.potatomaker.events.ResourcePackEnabledEvent;
 import org.cdc.potatomaker.events.ResourcePackLoadedEvent;
 import org.cdc.potatomaker.util.PMVersion;
 import org.cdc.potatomaker.util.fold.RuntimeWorkSpaceManager;
@@ -129,10 +130,14 @@ public class PMResourcePackLoader {
             }
             LOGGER.info("成功载入资源包:"+info.getName()+",资源包目录:"+pack);
             LOGGER.info(info.getName()+":"+info.getDescription());
+
+            Events.invokeEvent(new ResourcePackLoadedEvent(this, loader));
         }
     }
 
     public void enablePacks(){
+        //清除所有已有的资源.方便重新启用,但说句实话,作用不大.
+        UIRE.getInstance().clearResources();
         List<PackLoader> packs = packList.stream().map(PMResourcePackLoader::getPack).toList();
 
         for (PackLoader pack:packs){
@@ -142,12 +147,13 @@ public class PMResourcePackLoader {
                     if (entry.getName().matches("pack\\.json|pack\\.png")||entry.isDirectory()) return;
                     try {
                         UIRE.getInstance().addResource(entry.getName(), zipFile.getInputStream(entry));
+                        LOGGER.info(entry.getName());
                     } catch (IOException e) {
                         LOGGER.warn("无法载入资源包:"+pack.getInfo().getName());
                         e.printStackTrace();
                     }
                 });
-                Events.invokeEvent(new ResourcePackLoadedEvent(this,pack.getInfo().getName(), pack));
+                Events.invokeEvent(new ResourcePackEnabledEvent(this,pack));
             } catch (IOException e){
                 LOGGER.warn("无法载入资源包:"+pack.getInfo().getName()+"可能是因为此文件不存在");
                 e.printStackTrace();

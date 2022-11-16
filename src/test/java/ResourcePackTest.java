@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * e-mail: 3154934427@qq.com
- * TODO
+ * 资源包测试类
  *
  * @author cdc123
  * @classname ResourcePackTest
@@ -22,9 +22,9 @@ public class ResourcePackTest {
     @Test
     public void testPacks() throws FileNotFoundException, DefinedException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         Launcher.main(new String[0]);
-        Events.registerListener(event -> {
+        Events.registerListener(ResourcePackLoadedEvent.class,event -> {
             System.out.println("资源包已经载入"+event.getPackName());
-        },ResourcePackLoadedEvent.class);
+        });
         PMResourcePackLoader.getInstance().loadPacks();
     }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.cdc.potatomaker.plugin.loader.PluginLoader;
+import org.cdc.potatomaker.util.PMVersion;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -66,10 +67,8 @@ public class PluginInfo {
      */
     public int getInnerVersion(){
         //如果含有.,我们推测版本号可能类似于 1.0.1,系统会相加这三个数字来获取innerVersion
-        if (innerVersion < 0 && version.contains(".")){
-            AtomicInteger innerVersion = new AtomicInteger();
-            Arrays.stream(version.split("\\.")).forEach(a-> innerVersion.addAndGet(Integer.parseInt(a)));
-            return innerVersion.get();
+        if (innerVersion <= -1){
+            return PMVersion.getInnerVersion(version);
         }
         return innerVersion;
     }

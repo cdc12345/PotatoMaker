@@ -14,13 +14,11 @@ import org.cdc.potatomaker.resourcepack.PackLoader;
  */
 @Getter
 @Open
-public final class ResourcePackLoadedEvent extends Event{
+public final class ResourcePackLoadedEvent extends ResourcePackEvent{
     private final String packName;
-    private final PackLoader packLoader;
 
-    public ResourcePackLoadedEvent(Object source,String packName, PackLoader packLoader) {
-        super(source);
-        this.packName = packName;
-        this.packLoader = packLoader;
+    public ResourcePackLoadedEvent(Object source, PackLoader packLoader) {
+        super(source,packLoader);
+        this.packName = packLoader.getInfo().getName();
     }
 }

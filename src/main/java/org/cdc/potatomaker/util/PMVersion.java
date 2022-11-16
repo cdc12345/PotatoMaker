@@ -1,19 +1,36 @@
 package org.cdc.potatomaker.util;
 
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * e-mail: 3154934427@qq.com
- * TODO
+ * 版本工具
  *
  * @author cdc123
  * @classname PMVersion
  * @date 2022/11/15 10:00
  */
 public class PMVersion {
+    /**
+     * 简单获取内部版本
+     * @param version
+     * @return
+     */
+    public static int getInnerVersion(@NotNull String version){
+        if ( version.contains(".")){
+            AtomicInteger innerVersion = new AtomicInteger();
+            Arrays.stream(version.split("\\.")).forEach(a-> innerVersion.addAndGet(Integer.parseInt(a)));
+            return innerVersion.get();
+        }
+        return -1;
+    }
+
     private static PMVersion instance;
 
     public static PMVersion getInstance() {

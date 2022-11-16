@@ -5,7 +5,9 @@ import org.cdc.potatomaker.ui.component.ImagePanel;
 import org.cdc.potatomaker.util.fold.UserFolderManager;
 
 import javax.swing.*;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,6 +34,7 @@ public class WorkspaceSelector extends JFrame {
     }
 
     public void reloadWorkspaces(){
+        workspaces.clear();
         File[] workspaces1 = UserFolderManager.getInstance().getWorkspaceFolder().listFiles(a->{
            File pm = new File(a,".pm");
            return pm.exists();
@@ -43,9 +46,18 @@ public class WorkspaceSelector extends JFrame {
 
     public RecentWorkspaces reloadRecentWorkspaces(){
         return recent = new Gson().fromJson(
-                fromInputStream(UserFolderManager.getInstance().getOuterResourceAsStream("recentWorkspaces.json")),RecentWorkspaces.class);
+                fromInputStream(UserFolderManager.getInstance().getOuterResourceAsStream("recentWorkspaces.json",
+                        new ByteArrayInputStream("[]".getBytes(StandardCharsets.UTF_8)))),RecentWorkspaces.class);
     }
 
+    public void storeRecentWorkspace(){
+        if (recent == null) reloadRecentWorkspaces();
+        UserFolderManager.getInstance().writeResource(new Gson().toJson(recent),"recentWorkspaces.json");
+    }
+
+    public void addAndUpdateRecentWorkspace(){
+
+    }
 
     public static class RecentWorkspaces extends ArrayList<File> {}
 

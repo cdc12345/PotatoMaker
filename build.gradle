@@ -10,6 +10,8 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 17
 targetCompatibility = 17
 
+project.ext.builddate = new Date().format('wwuHH')
+
 compileJava.options.encoding = 'UTF-8'
 tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
@@ -30,6 +32,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
     //basic
+    implementation fileTree(dir:'lib',includes: ['*.jar'])
     implementation 'com.google.code.gson:gson:2.9.1'
     implementation 'org.jetbrains:annotations:20.1.0'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.18.0'
@@ -45,6 +48,15 @@ task pmInit{
         file("run").mkdir()
     }
 }
+
+apply from: 'resourcepacks/resourcePack.gradle'
+task runPM(group: 'pm',type: JavaExec,dependsOn: exportPacks){
+    jvmArgs '--add-opens', 'java.base/java.lang=ALL-UNNAMED'
+
+    classpath += sourceSets.main.runtimeClasspath
+    main = "org.cdc.potatomaker.Launcher"
+}
+
 test {
     useJUnitPlatform()
 
@@ -54,13 +66,4 @@ test {
     maxHeapSize = "1024m"
 
     jvmArgs '--add-opens', 'java.base/java.lang=ALL-UNNAMED'
-}
-
-jar{
-    archiveFileName = "pm.jar"
-    manifest {
-        attributes(
-                "Main-Class":"org.cdc.potatomaker.Launcher"
-        )
-    }
 }

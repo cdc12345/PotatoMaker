@@ -1,6 +1,7 @@
 package org.cdc.potatomaker.plugin.loader;
 
 import org.cdc.potatomaker.annotation.Open;
+import org.cdc.potatomaker.util.ResourceManager;
 
 import java.io.File;
 
@@ -38,8 +39,8 @@ public abstract class AbstractPlugin {
         return pluginLoader;
     }
 
-    protected File getDataFolder(){
-        return getPluginLoader().getPluginDataFolder();
+    protected ResourceManager getDataFolder(){
+        return new ResourceManager(getPluginLoader().getPluginDataFolder());
     }
 
 }

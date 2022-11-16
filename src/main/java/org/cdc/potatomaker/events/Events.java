@@ -23,11 +23,15 @@ public class Events {
      * @param event 监听事件
      * @param <E> Event
      */
-    public static<E extends Event> void registerListener(Consumer<E> listener,Class<E> event){
+    public static<E extends Event> void registerListener(Class<E> event,Consumer<E> listener){
         if (!listeners.containsKey(event)){
             listeners.put(event,new ArrayList<>());
         }
         listeners.get(event).add((Consumer<Event>) listener);
+    }
+
+    public static<E extends Event> void unregisterListener(Class<E> event,Consumer<E> listener){
+        listeners.get(event).remove(listener);
     }
 
     /**
@@ -39,4 +43,6 @@ public class Events {
         if (listeners1 != null)
                 listeners1.forEach(a->a.accept(event));
     }
+
+
 }

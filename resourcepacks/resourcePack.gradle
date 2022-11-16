@@ -1,0 +1,41 @@
+task cleanupResourcePacks(type: DefaultTask){
+    doFirst {
+        delete 'build/resourcepacks'
+    }
+}
+
+file('resourcepacks').traverse([maxDepth: 0, type: groovy.io.FileType.DIRECTORIES]) {
+    tasks.create(name: 'export_pack_' + it.getName().replace('.', ''), type: Zip) { task ->
+        task.archiveName = it.getName() + '.zip'
+        task.destinationDir = file('build/resourcepacks/')
+        task.from 'resourcepacks/' + it.getName()
+        println 'resourcepacks/' + it.getName()
+        task.group "pmresourcespack"
+        task.mustRunAfter cleanupResourcePacks
+    }
+}
+
+task exportPacks(type: DefaultTask) {
+    dependsOn tasks.matching { Task t -> t.name.startsWith("export_pack_") }
+    dependsOn cleanupResourcePacks
+}
+
+task exportReleasePreTask(type: DefaultTask, dependsOn: testClasses) {
+    doFirst {
+        delete 'build/export/'
+        mkdir 'build/export/'
+    }
+}
+
+jar {
+    archiveFileName = 'pm.jar'
+    manifest {
+        attributes(
+                'Main-Class': 'net.mcreator.Launcher',
+                'Build-Date': project.builddate
+        )
+    }
+    dependsOn exportReleasePreTask
+}
+
+

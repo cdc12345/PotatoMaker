@@ -1,6 +1,7 @@
 package org.cdc.potatomaker.events;
 
 import lombok.Data;
+import lombok.Getter;
 
 /**
  * e-mail: 3154934427@qq.com
@@ -11,6 +12,7 @@ import lombok.Data;
  * @date 2022/11/13 22:36
  */
 @Data
+@Getter
 public abstract class Event {
     protected Object source;
 
