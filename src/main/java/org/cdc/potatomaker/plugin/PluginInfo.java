@@ -53,6 +53,10 @@ public class PluginInfo {
      */
     private String[] depends;
     /**
+     * 软依赖
+     */
+    private String[] softDepends;
+    /**
      * 插件实例化优先级
      */
     private int priority = -1;
@@ -71,5 +75,9 @@ public class PluginInfo {
             return PMVersion.getInnerVersion(version);
         }
         return innerVersion;
+    }
+
+    public String toString(){
+        return name+":"+version;
     }
 }

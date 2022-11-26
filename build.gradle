@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'idea'
     id 'com.github.johnrengelman.shadow' version '2.0.4'
+    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.6'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 group 'org.cdc'
@@ -16,11 +18,35 @@ compileJava.options.encoding = 'UTF-8'
 tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
 
+idea {
+    module {
+        inheritOutputDirs = true
+        excludeDirs = [file(".gradle"), file(".idea"), file(".github"), file("build"),
+                       file("gradle"), file("jdk"), file("license"), file("logs")] as Set<File>
+    }
+}
+
+
+configurations {
+    testImplementation.extendsFrom compileOnly
+
+    provided
+    compileOnly.extendsFrom provided
+    runtimeOnly.extendsFrom provided
+
+    export.extendsFrom implementation
+    export.canBeResolved = true
+
+    win64
+}
+
 allprojects {
     repositories {
         maven {
             url 'https://maven.aliyun.com/repository/public/'
         }
+        maven { url "https://repo.gradle.org/gradle/libs-releases-local/" }
+        maven { url "https://maven.scijava.org/content/repositories/public/" }
         mavenLocal()
         mavenCentral()
     }
@@ -41,6 +67,20 @@ dependencies {
     implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.31'
     compileOnly "org.projectlombok:lombok:1.18.20"
     annotationProcessor "org.projectlombok:lombok:1.18.20"
+
+    // JFX natives
+    win64 group: 'org.openjfx', name: 'javafx-base', version: '18.0.2', classifier: 'win'
+    win64 group: 'org.openjfx', name: 'javafx-controls', version: '18.0.2', classifier: 'win'
+    win64 group: 'org.openjfx', name: 'javafx-graphics', version: '18.0.2', classifier: 'win'
+    win64 group: 'org.openjfx', name: 'javafx-media', version: '18.0.2', classifier: 'win'
+    win64 group: 'org.openjfx', name: 'javafx-web', version: '18.0.2', classifier: 'win'
+    win64 group: 'org.openjfx', name: 'javafx-swing', version: '18.0.2', classifier: 'win'
+}
+
+javafx {
+    version = "18.0.2"
+    modules = ['javafx.web', 'javafx.swing']
+    configuration = 'provided' // we provide natives during deployment or with SDK
 }
 
 task pmInit{

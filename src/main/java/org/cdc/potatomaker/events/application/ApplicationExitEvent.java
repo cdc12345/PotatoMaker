@@ -1,6 +1,7 @@
-package org.cdc.potatomaker.events;
+package org.cdc.potatomaker.events.application;
 
-import org.cdc.potatomaker.annotation.Open;
+
+import org.cdc.potatomaker.events.Event;
 
 /**
  * e-mail: 3154934427@qq.com
@@ -10,8 +11,7 @@ import org.cdc.potatomaker.annotation.Open;
  * @classname ApplicationExitEvent
  * @date 2022/11/16 7:45
  */
-@Open
-public class ApplicationExitEvent extends Event{
+public class ApplicationExitEvent extends Event {
     public ApplicationExitEvent(Object source) {
         super(source);
     }

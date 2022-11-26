@@ -3,6 +3,7 @@ package org.cdc.potatomaker.ui.dialogs;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.cdc.potatomaker.preference.PreferenceManager;
+import org.cdc.potatomaker.util.locale.GlobalUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,6 +56,7 @@ public class UserFolderSelector extends JDialog{
     }
 
     private void initUserFolderSelector(){
+        setTitle("请选择用户目录");
         setLayout(new BorderLayout());
         JPanel folderSelect = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
@@ -62,7 +64,7 @@ public class UserFolderSelector extends JDialog{
         userFolderComboBox.setEditable(true);
         if (userFolder != null) userFolderComboBox.setSelectedItem(userFolderComboBox);
 
-        String defaultUserFolder = System.getProperty("user.home")+"/"+".pm";
+        String defaultUserFolder = System.getProperty("user.home")+"\\"+".pm";
         String historyKey = "userFolder.history";
         if (!PreferenceManager.getPreferences().containsKey(historyKey)||!
                 (PreferenceManager.getPreferences().get(historyKey) instanceof UserFolderHistory)){

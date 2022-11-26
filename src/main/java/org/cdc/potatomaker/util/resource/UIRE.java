@@ -12,7 +12,6 @@ import java.awt.*;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -36,7 +35,7 @@ public class UIRE {
         }
         return instance;
     }
-    private ConcurrentHashMap<String,InputStream> resources = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String,byte[]> resources = new ConcurrentHashMap<>();
     private UIRE() {
         resources = new ConcurrentHashMap<>();
     }
@@ -46,23 +45,48 @@ public class UIRE {
     public void clearResources(){resources.clear();}
 
     public void addResource(String name,InputStream inputStream){
-        resources.put(name,inputStream);
+        try {
+            resources.put(name,inputStream.readAllBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public InputStream getResource(Pattern name){
-        return resources.entrySet().stream().filter(a->name.matcher(a.getKey()).find()).map(Map.Entry::getValue)
-                .findFirst().orElse(ResourceManager.getInnerResourceAsStream(name.pattern()));
+    public InputStream getResource(@NotNull Pattern name){
+        return bytesToInput(resources.entrySet().stream().filter(a-> name.matcher(a.getKey()).find()).map(Map.Entry::getValue)
+                .findFirst().orElse(new byte[0]));
     }
 
     public InputStream getResource(@NotNull String name){
-        return resources.entrySet().stream().filter(a->name.equals(a.getKey())).map(Map.Entry::getValue)
-                .findFirst().orElse(ResourceManager.getInnerResourceAsStream(name));
+        return getResource(Pattern.compile(identifierToResourcePath(name)));
+    }
+
+    public InputStream getResourceByKeyWord(@NotNull String name){
+        return bytesToInput(resources.entrySet().stream().filter(a->a.getKey().contains(name)).map(Map.Entry::getValue)
+                .findFirst().orElse(new byte[0]));
+    }
+
+    public java.util.List<InputStream> getResourcesByKeyWord(@NotNull String name){
+        return resources.entrySet().stream().filter(a->a.getKey().contains(name)).map(a->bytesToInput(a.getValue())).toList();
+    }
+
+    /**
+     * 此方法用来预防多次调用同一资源导致资源无法正常访问的问题.
+     * @param bytes 输入的字节数组
+     * @return 拷贝的输入流
+     */
+    private InputStream bytesToInput(byte[] bytes){
+        if (bytes.length > 0) {
+            return new ByteArrayInputStream(bytes);
+        } else {
+            return null;
+        }
     }
 
     public File getResourceAsFile(@NotNull String name){
         var user = UserFolderManager.getInstance();
         var path = user.getCacheFolder().getPath()+"/"+name;
-        user.writeResource(getResource(Pattern.compile(name)),path);
+        user.writeResource(getResourceByKeyWord(name),path);
         return new File(path);
     }
 
@@ -79,31 +103,44 @@ public class UIRE {
         if (!(identifier.endsWith(".png") || identifier.endsWith(".gif")))
             identifier += ".png";
 
-        String themedTextureIdentifier = "images." + identifier;
+        String textureIdentifier = "images." + identifier;
+
 
         // we start by checking if the loaded pack contains the image
-        if (getResource(identifierToResourcePath(themedTextureIdentifier)) != null) {
-            return getImageFromResourceID(themedTextureIdentifier);
+        if (getResourceByKeyWord(identifierToResourcePath(textureIdentifier)) != null) {
+            return getImageFromResourceID(textureIdentifier);
         } else { // if the loaded pack does not have the image, we fallback to the default one
-            return getImageFromResourceID("themes.default_dark.images." + identifier);
+            try {
+                return new ImageIcon(ImageIO.read(
+                        ResourceManager.getInnerResourceAsStream(identifierToResourcePath(textureIdentifier))));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return new ImageIcon();
         }
     }
 
     public ImageIcon getImageFromResourceID(String identifier) {
         identifier = identifierToResourcePath(identifier);
 
-        if (getResource(identifierToResourcePath(identifier)) != null) {
+        var resource = getResourceByKeyWord(identifier);
+        if (resource != null) {
             try {
-                return new ImageIcon(ImageIO.read(getResource(Pattern.compile(identifierToResourcePath(identifier)))));
+                var image = ImageIO.read(resource);
+                if (image == null){
+                    LOG.info("无法找到:"+identifier);
+                    return new ImageIcon();
+                }
+                return new ImageIcon(image);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
+            return new ImageIcon();
         }
         else {
             ImageIcon newItem = new ImageIcon(
                     Toolkit.getDefaultToolkit().createImage(getResourceAsURL(identifierToResourcePath(identifier))));
-            resources.put(identifierToResourcePath(identifier), getResource(Pattern.compile(identifierToResourcePath(identifier))));
+            addResource(identifierToResourcePath(identifier), getResource(Pattern.compile(identifierToResourcePath(identifier))));
             return newItem;
         }
     }

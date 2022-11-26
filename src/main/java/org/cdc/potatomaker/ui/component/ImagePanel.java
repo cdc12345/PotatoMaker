@@ -19,6 +19,9 @@
 package org.cdc.potatomaker.ui.component;
 
 
+import org.cdc.potatomaker.resourcepack.themes.ColorScheme;
+import org.cdc.potatomaker.resourcepack.themes.ThemeManager;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -30,7 +33,7 @@ public class ImagePanel extends JPanel {
 	private boolean original = false;
 	private boolean fitToWidth = false;
 
-	private final Color defaultColor = (Color) UIManager.get("MCreatorLAF.DARK_ACCENT");
+	private Color defaultColor;
 
 	private int offsetY = 0;
 

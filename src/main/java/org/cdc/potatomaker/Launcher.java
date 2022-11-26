@@ -1,14 +1,14 @@
 package org.cdc.potatomaker;
 
+import com.sun.javafx.scene.text.FontHelper;
+import javafx.embed.swing.JFXPanel;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.cdc.potatomaker.exception.DefinedException;
-import org.cdc.potatomaker.util.DefaultExceptionHandler;
-import org.cdc.potatomaker.util.LoggingOutputStream;
-import org.cdc.potatomaker.util.OSUtil;
-import org.cdc.potatomaker.util.PotatoMakerApplication;
+import org.cdc.potatomaker.util.*;
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
@@ -67,6 +67,18 @@ public class Launcher {
                 """;
         LOG.info(logo);
         LOG.info("PotatoMaker感谢您的使用");
+
+        TerribleModuleHacks.openAllUnnamed();
+        TerribleModuleHacks.openMCreatorRequirements();
+
+        UTF8Forcer.forceGlobalUTF8();
+
+        // Init JFX Toolkit
+        try {
+            SwingUtilities.invokeAndWait(JFXPanel::new);
+        } catch (InterruptedException | InvocationTargetException e) {
+            LOG.error("无法启动JFX toolkit", e);
+        }
 
         new Thread(()-> {
             try {

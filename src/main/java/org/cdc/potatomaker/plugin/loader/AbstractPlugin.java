@@ -1,5 +1,6 @@
 package org.cdc.potatomaker.plugin.loader;
 
+import org.apache.logging.log4j.Logger;
 import org.cdc.potatomaker.annotation.Open;
 import org.cdc.potatomaker.util.ResourceManager;
 
@@ -31,16 +32,20 @@ public abstract class AbstractPlugin {
 
     public abstract void onDisable();
 
-    void inject(PluginLoader pluginLoader){
-        this.pluginLoader = pluginLoader;
-    }
-
-    protected PluginLoader getPluginLoader(){
-        return pluginLoader;
-    }
-
     protected ResourceManager getDataFolder(){
-        return new ResourceManager(getPluginLoader().getPluginDataFolder());
+        return new ResourceManager(pluginLoader.getPluginDataFolder());
+    }
+
+    protected String getPluginName(){
+        return pluginLoader.getPluginInfo().getName();
+    }
+
+    protected File getPluginFolder(){
+        return pluginLoader.getPluginPath();
+    }
+
+    protected Logger getLogger(){
+        return pluginLoader.getLogger();
     }
 
 }

@@ -1,6 +1,9 @@
 package org.cdc.potatomaker.events;
 
 import lombok.Getter;
+import org.cdc.potatomaker.annotation.Open;
+import org.cdc.potatomaker.annotation.events.EventNotSupportRegistered;
+import org.cdc.potatomaker.preference.Preferences;
 
 import java.util.HashMap;
 import java.util.function.Consumer;
@@ -14,24 +17,14 @@ import java.util.function.Supplier;
  * @classname PreferenceRenderingEvent
  * @date 2022/11/13 22:38
  */
+@EventNotSupportRegistered
+@Getter
 public final class PreferenceRenderingEvent extends Event {
-    @Getter
-    private final HashMap<String,Object> cache;
-    private final Supplier<Object> getter;
-    private final Consumer<Object> setter;
-    public PreferenceRenderingEvent(Supplier<Object> getter, Consumer<Object> setter,HashMap<String,Object> cache){
-        super(null);
-        this.getter = getter;
-        this.setter = setter;
-        this.cache = cache;
-    }
+    private final Preferences cachePreferences;
 
-    public void setValue(Object obj){
-        this.setter.accept(obj);
-    }
+    public PreferenceRenderingEvent(Object source, Preferences cachePreferences) {
+        super(source);
 
-    public Object getValue(){
-        return this.getter.get();
+        this.cachePreferences = cachePreferences;
     }
-
 }

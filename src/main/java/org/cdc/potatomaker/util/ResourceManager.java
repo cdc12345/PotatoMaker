@@ -62,13 +62,11 @@ public class ResourceManager {
      */
     public OutputStream getOuterResourceAsOutputStream(@NotNull String outerPath){
         var outer = getOuterResourceAsFile(outerPath);
-        if (outer.isDirectory()){
-            return null;
-        }
         outer.getParentFile().mkdirs();
         try {
             return new FileOutputStream(outer);
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
             return null;
         }
     }

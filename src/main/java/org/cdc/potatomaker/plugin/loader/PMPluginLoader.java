@@ -11,18 +11,22 @@ import org.cdc.potatomaker.exception.PluginExistException;
 import org.cdc.potatomaker.plugin.PluginInfo;
 import org.cdc.potatomaker.plugin.PluginType;
 import org.cdc.potatomaker.preference.PreferenceManager;
+import org.cdc.potatomaker.preference.Preferences;
 import org.cdc.potatomaker.util.PMVersion;
 import org.cdc.potatomaker.util.PluginLoaderBuilder;
 import org.cdc.potatomaker.util.fold.RuntimeWorkSpaceManager;
 import org.cdc.potatomaker.util.fold.UserFolderManager;
+import org.cdc.potatomaker.util.resource.UIRE;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.util.*;
+import java.util.jar.JarFile;
 
 /**
  * e-mail: 3154934427@qq.com
@@ -62,10 +66,6 @@ public class PMPluginLoader {
      * 无效的插件缓存
      */
     private final HashMap<String,PluginLoader> invalidatePlugins;
-    /**
-     * 需要启用的插件,由用户决定
-     */
-    private final ArrayList<String> enabledPlugins = new ArrayList<>();
 
     private PMPluginLoader() {
         firstPluginPath = RuntimeWorkSpaceManager.getInstance().getPluginFolder();
@@ -76,8 +76,10 @@ public class PMPluginLoader {
         invalidatePlugins = new HashMap<>();
     }
 
-    public void loadPlugins() throws DefinedException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    public void loadPlugins() throws DefinedException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, NoSuchFieldException {
         LOG.info("开始载入插件");
+        Preferences preferences = PreferenceManager.getPreferences();
+        preferences.computeIfAbsent("hidden.pluginsEnabled", k -> new ArrayList<>());
         for (File a:listPlugins()){
             try {
                 var loader = loadPlugin(a);
@@ -104,10 +106,17 @@ public class PMPluginLoader {
             PluginInfo info = a.getPluginInfo();
             //依赖处理
             if (info.getDepends()!=null&&info.getDepends().length!=0){
-                for (String dep:info.getDepends()){
-                    var dependLoader = plugins.get(dep).getClassLoader();
+                for (String dep:info.getDepends()){                    var dependLoader = plugins.get(dep);
                     if (dependLoader == null) throw new DefinedException("无法找到插件"+info.getName()+"的依赖"+dep);
-                    a.getClassLoader().addDependency(dependLoader);
+                    a.getClassLoader().addDependency(dependLoader.getClassLoader());
+                }
+            }
+            //软依赖
+            if (info.getSoftDepends()!=null&&info.getSoftDepends().length!=0){
+                for (String dep:info.getSoftDepends()){
+                    var dependLoader = plugins.get(dep);
+                    if (dependLoader != null)
+                        a.getClassLoader().addDependency(dependLoader.getClassLoader());
                 }
             }
             LOG.info("插件"+a.getPluginInfo().getName()+"依赖梳理完毕");
@@ -115,9 +124,12 @@ public class PMPluginLoader {
             if (info.getMain() != null) {
                 try {
                     Class<?> mainClass = a.getClassLoader().loadClass(info.getMain());
+                    var abstractPluginClass = AbstractPlugin.class;
+                    var filed = abstractPluginClass.getDeclaredField("pluginLoader");
+                    filed.setAccessible(true);
                     AbstractPlugin mainIn = (AbstractPlugin) mainClass.getConstructor(new Class[0]).newInstance();
+                    filed.set(mainIn,a);
                     a.setPluginInstance(mainIn);
-                    mainIn.inject(a);
                     if (Arrays.asList(info.getTypes()).contains(PluginType.VanillaAddon)) {
                         mainIn.onLoad();
                     }
@@ -129,7 +141,10 @@ public class PMPluginLoader {
                 }
             }
         }
-
+        ArrayList<String> enabled = (ArrayList<String>) preferences.get("hidden.pluginsEnabled");
+        for (String plugin:enabled){
+            plugins.get(plugin).setEnable(true);
+        }
     }
 
     public List<File> listPlugins(){
@@ -181,22 +196,47 @@ public class PMPluginLoader {
      * @param pluginLoader 插件载入器
      * @throws PluginEnabledException 插件已经启用时会报错
      */
-    public void enablePlugin(PluginLoader pluginLoader) throws PluginEnabledException {
+    public void enablePlugin(PluginLoader pluginLoader) throws PluginEnabledException, IOException {
         String pluginName = pluginLoader.getPluginInfo().getName();
-        if (pluginLoader.isEnable()){
+        LOG.info("正在启用插件"+pluginName);
+        if (pluginLoader.isEnabled()){
             throw new PluginEnabledException("can't enable plugin:"+pluginName+",because it is enabled");
         }
+        //载入资源文件
+        JarFile jarFile = new JarFile(pluginLoader.getPluginPath());
+        jarFile.stream().forEach(jarEntry ->{
+            if (jarEntry.getName().startsWith("assets")){
+                try {
+                    UIRE.getInstance().addResource(jarEntry.getName(),jarFile.getInputStream(jarEntry));
+                } catch (IOException ignore) {
+                    LOG.info("无效资源:位于插件"+pluginLoader.getPluginInfo().getName()+"的"+jarEntry.getName());
+                }
+            }
+        });
+        jarFile.close();
+
         if (pluginLoader.getPluginInstance() != null){
             pluginLoader.getPluginInstance().onEnable();
         }
         pluginLoader.setPluginDataFolder(new File(UserFolderManager.getInstance().getCacheFolder(),pluginName));
-        pluginLoader.setEnable(true);
+        pluginLoader.setEnabled(true);
     }
 
-    public void enablePlugins() throws PluginEnabledException {
+    public void enableAllPlugins() throws PluginEnabledException {
+        Preferences preferences = PreferenceManager.getPreferences();
+        ArrayList<String> enabled = (ArrayList<String>) preferences.get("hidden.pluginsEnabled");
         for (PluginLoader pluginLoader:plugins.values()) {
-            if (enabledPlugins.contains(pluginLoader.getPluginInfo().getName()))
-                enablePlugin(pluginLoader);
+            var name = pluginLoader.getPluginInfo().getName();
+            if (pluginLoader.isEnable()) {
+                if (!pluginLoader.isEnabled()) {
+                    try {
+                        enablePlugin(pluginLoader);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (!enabled.contains(name))enabled.add(name);
+                }
+            } else enabled.remove(name);
         }
     }
 

@@ -13,7 +13,6 @@ import org.cdc.potatomaker.resourcepack.PackLoader;
  * @date 2022/11/16 7:40
  */
 @Getter
-@Open
 public class ResourcePackEvent extends Event{
     protected final PackLoader packLoader;
 

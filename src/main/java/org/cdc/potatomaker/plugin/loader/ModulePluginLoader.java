@@ -1,6 +1,8 @@
 package org.cdc.potatomaker.plugin.loader;
 
 import org.cdc.potatomaker.annotation.Open;
+import org.cdc.potatomaker.events.Event;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -31,7 +33,7 @@ public class ModulePluginLoader extends URLClassLoader {
 
     private final ArrayList<ModulePluginLoader> dependencies = new ArrayList<>();
 
-    public void addDependency(ModulePluginLoader pluginLoader){
+    public void addDependency(@NotNull ModulePluginLoader pluginLoader){
         dependencies.add(pluginLoader);
     }
 
@@ -42,11 +44,13 @@ public class ModulePluginLoader extends URLClassLoader {
         try{
             result = originClassLoader.loadClass(name);
             if (result.getPackage().getName().startsWith(limitClassPackagePrefix)
-                    &&!result.isAnnotation()&&!result.isAnnotationPresent(Open.class)){
+                    //排除非注解 排除没被Open注解的类
+                    &&!result.isAnnotation()&&!result.isAnnotationPresent(Open.class)
+                    //排除事件类
+                    &&!result.isInstance(Event.class)){
                 result = null;
             }
-        } catch (Exception ignore){
-        }
+        } catch (Exception ignore){}
 
         //从依赖中寻找
         for (ModulePluginLoader pluginLoader : dependencies) {
@@ -59,6 +63,7 @@ public class ModulePluginLoader extends URLClassLoader {
         try {
             result = super.loadClass(name, resolve);
         } catch (ClassNotFoundException ignore){}
+
         if (result == null) throw new ClassNotFoundException("can't find class:"+name);
         return result;
     }

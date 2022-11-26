@@ -20,16 +20,10 @@
 package org.cdc.potatomaker.resourcepack.themes;
 
 import com.google.gson.annotations.Expose;
-import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
+
 import java.awt.*;
 
-/**
- * <p>A ColorScheme is an object defining the look of MCreator in general.
- * This object contains only the 5 main colors used by the software. However, A ColorScheme
- * if it is defined inside a plugin.</p>
- */
-@Setter
 public class ColorScheme {
 
 	@Expose
@@ -38,10 +32,12 @@ public class ColorScheme {
 	private String altBackgroundColor;
 	@Expose
 	private String secondAltBackgroundColor;
+
 	@Expose
 	private String foregroundColor;
 	@Expose
 	private String altForegroundColor;
+
 	@Expose
 	@Nullable String interfaceAccentColor;
 
@@ -80,22 +76,7 @@ public class ColorScheme {
 		return Color.decode(foregroundColor);
 	}
 
-	/**
-	 * @return <p>Overrides the interfaceAccentColor </p>
-	 */
 	@Nullable public String getInterfaceAccentColor() {
 		return interfaceAccentColor;
-	}
-
-	@Override
-	public String toString() {
-		return "ColorScheme{" +
-				"backgroundColor='" + backgroundColor + '\'' +
-				", altBackgroundColor='" + altBackgroundColor + '\'' +
-				", secondAltBackgroundColor='" + secondAltBackgroundColor + '\'' +
-				", foregroundColor='" + foregroundColor + '\'' +
-				", altForegroundColor='" + altForegroundColor + '\'' +
-				", interfaceAccentColor='" + interfaceAccentColor + '\'' +
-				'}';
 	}
 }

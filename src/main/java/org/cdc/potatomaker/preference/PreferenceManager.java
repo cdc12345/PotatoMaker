@@ -1,9 +1,10 @@
 package org.cdc.potatomaker.preference;
 
 import com.google.gson.Gson;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.cdc.potatomaker.preference.render.PreferenceRender;
+import org.cdc.potatomaker.preference.sections.PreferenceSectionsManager;
 import org.cdc.potatomaker.util.fold.RuntimeWorkSpaceManager;
 
 import java.io.ByteArrayInputStream;
@@ -42,22 +43,17 @@ public class PreferenceManager {
     }
 
     public static void setPreferences(Preferences pre){
-        if (pre == null)
-            preferences = new Preferences();
-        else
-            preferences = pre;
+        preferences = Objects.requireNonNullElseGet(pre, Preferences::new);
     }
 
-    public static PreferenceRender getPreferenceRender(){
-        return PreferenceRenderOverride.getInstance();
+    public static void storePreferences() throws IOException {
+        var file = RuntimeWorkSpaceManager
+                        .getInstance().getOuterResourceAsFile("config/preferences.json");
+        FileUtils.writeStringToFile(file,new Gson().toJson(preferences),StandardCharsets.UTF_8,false);
     }
 
-    public static void storePreferences(){
-        if (getPreferenceRender() != null)
-            preferences = getPreferenceRender().storePreference();
-        RuntimeWorkSpaceManager.getInstance().writeResource(new Gson().toJson(getPreferences()),
-                "config/preferences.json");
+    public static String[] getSections(){
+        return PreferenceSectionsManager.getSectionsName();
     }
-
 
 }

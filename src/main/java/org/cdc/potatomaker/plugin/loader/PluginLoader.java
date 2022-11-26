@@ -47,8 +47,12 @@ public class PluginLoader {
      */
     private Logger logger;
     /**
-     * 插件载入状态
+     * 插件是否启用
      */
     private boolean enable;
+    /**
+     * 插件是否已经启用
+     */
+    private boolean enabled;
 
 }

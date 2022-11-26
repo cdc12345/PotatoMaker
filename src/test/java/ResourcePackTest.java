@@ -1,6 +1,7 @@
 
 import org.cdc.potatomaker.Launcher;
 import org.cdc.potatomaker.events.Events;
+import org.cdc.potatomaker.events.PMEvents;
 import org.cdc.potatomaker.events.ResourcePackLoadedEvent;
 import org.cdc.potatomaker.exception.DefinedException;
 import org.cdc.potatomaker.resourcepack.PMResourcePackLoader;
@@ -22,7 +23,7 @@ public class ResourcePackTest {
     @Test
     public void testPacks() throws FileNotFoundException, DefinedException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         Launcher.main(new String[0]);
-        Events.registerListener(ResourcePackLoadedEvent.class,event -> {
+        PMEvents.registerListener(ResourcePackLoadedEvent.class, "ResourcePack-Test",event -> {
             System.out.println("资源包已经载入"+event.getPackName());
         });
         PMResourcePackLoader.getInstance().loadPacks();

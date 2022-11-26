@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.cdc.potatomaker.annotation.Open;
 import org.cdc.potatomaker.events.Events;
 import org.cdc.potatomaker.events.ResourcePackEnabledEvent;
 import org.cdc.potatomaker.events.ResourcePackLoadedEvent;
@@ -17,7 +16,6 @@ import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipFile;
 
@@ -31,7 +29,6 @@ import static org.cdc.potatomaker.util.ResourceManager.fromInputStream;
  * @classname PMResourcePackLoader
  * @date 2022/11/15 9:28
  */
-@Open
 public class PMResourcePackLoader {
     public static PackLoader getPack(String name){
         return getInstance().packs.get(name);
@@ -147,7 +144,6 @@ public class PMResourcePackLoader {
                     if (entry.getName().matches("pack\\.json|pack\\.png")||entry.isDirectory()) return;
                     try {
                         UIRE.getInstance().addResource(entry.getName(), zipFile.getInputStream(entry));
-                        LOGGER.info(entry.getName());
                     } catch (IOException e) {
                         LOGGER.warn("无法载入资源包:"+pack.getInfo().getName());
                         e.printStackTrace();

@@ -19,11 +19,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PMVersion {
     /**
      * 简单获取内部版本
-     * @param version
-     * @return
+     * @param version 版本
+     * @return 内部版本
      */
     public static int getInnerVersion(@NotNull String version){
-        if ( version.contains(".")){
+        if (version.contains(".")){
             AtomicInteger innerVersion = new AtomicInteger();
             Arrays.stream(version.split("\\.")).forEach(a-> innerVersion.addAndGet(Integer.parseInt(a)));
             return innerVersion.get();

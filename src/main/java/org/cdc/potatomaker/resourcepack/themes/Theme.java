@@ -19,46 +19,41 @@
 
 package org.cdc.potatomaker.resourcepack.themes;
 
-
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
-import lombok.Setter;
 import org.cdc.potatomaker.preference.PreferenceManager;
 import org.cdc.potatomaker.util.resource.UIRE;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.regex.Pattern;
 
 import static org.cdc.potatomaker.util.ResourceManager.fromInputStream;
-@Setter
+/**
+ * from MCreator;
+ */
 @SuppressWarnings("unused") public class Theme {
-	private static Theme instance;
+	private static Theme theme;
 
-	public static Theme getInstance() {
-		if (instance == null) {
-			instance = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(fromInputStream(UIRE.getInstance().getResource(Pattern.compile("theme\\.json"))),Theme.class);
-		}
-		return instance;
+	public static Theme getInstance(){
+		if (theme == null) theme = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+				.fromJson(fromInputStream(UIRE.getInstance().getResourceByKeyWord("mcreator/theme.json")),Theme.class);
+		return theme;
 	}
-
-
-
-
 	@Expose
 	@Nullable private String version;
 	@Expose
 	@Nullable private String credits;
 	@Expose
-	@Nullable private String defaultFont;
-	@Expose
 	private boolean useDefaultFontForSecondary;
 	@Expose
 	private int fontSize;
+
 	@Expose
 	@Nullable private ColorScheme colorScheme;
 
 	private ImageIcon icon;
+
+
 
 	/**
 	 * @return <p>A String with optional credits to give to someone.</p>
@@ -80,7 +75,7 @@ import static org.cdc.potatomaker.util.ResourceManager.fromInputStream;
 	 * @return <p>The main font size</p>
 	 */
 	public int getFontSize() {
-		int forceTextSize = (Integer) PreferenceManager.getPreferences().getOrDefault("ui.forceSize",0);
+		int forceTextSize = (int) PreferenceManager.getPreferences().getOrDefault("pm.forceSize",-1);
 		if (forceTextSize > 0){
 			return forceTextSize;
 		} else if (fontSize != 0){
@@ -90,15 +85,6 @@ import static org.cdc.potatomaker.util.ResourceManager.fromInputStream;
 		}
 	}
 
-	/**
-	 * @return The default font to use with some languages.
-	 */
-	public String getDefaultFont() {
-		if (defaultFont != null)
-			return defaultFont;
-		else
-			return "Sans-Serif";
-	}
 
 	/**
 	 * @return <p>Use the default font as the main font</p>
@@ -106,36 +92,19 @@ import static org.cdc.potatomaker.util.ResourceManager.fromInputStream;
 	public boolean useDefaultFontForSecondary() {
 		return useDefaultFontForSecondary;
 	}
-	public ColorScheme getColorScheme() {
-		return colorScheme;
-	}
 
-	/**
-	 *
-	 * @return <p>An {@link ImageIcon} representing the plugin.</p>
-	 */
+	public ColorScheme getColorScheme() {
+		if (colorScheme != null)
+			return colorScheme;
+		else
+			return (ColorScheme) UIManager.get(ThemeManager.colorScheme);
+	}
 	public ImageIcon getIcon() {
 		return icon;
 	}
 
-	/**
-	 * <p>To be detected, the name of the image file needs to be "icon.png" located into the main folder.</p>
-	 *
-	 */
 	public void setIcon(ImageIcon icon) {
 		this.icon = icon;
 	}
 
-	@Override
-	public String toString() {
-		return "Theme{" +
-				"version='" + version + '\'' +
-				", credits='" + credits + '\'' +
-				", defaultFont='" + defaultFont + '\'' +
-				", useDefaultFontForSecondary=" + useDefaultFontForSecondary +
-				", fontSize=" + fontSize +
-				", colorScheme=" + colorScheme +
-				", icon=" + icon +
-				'}';
-	}
 }
